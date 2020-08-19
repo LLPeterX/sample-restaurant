@@ -3,6 +3,7 @@ import { connect } from 'react-redux'
 import { deleteFromCart, addedToCart } from '../../actions'
 import './cart-table.scss';
 
+
 const CartTable = ({ items, deleteFromCart, addedToCart }) => {
     return (
         <>
@@ -14,12 +15,16 @@ const CartTable = ({ items, deleteFromCart, addedToCart }) => {
                             <div className="cart__item" key={item.id}>
                                 <img src={item.url} className="cart__item-img" alt={item.title}></img>
                                 <div className="cart__item-title">{item.title}</div>
-                                <div className="cart__item-price" onClick={()=> addedToCart(item)}>{item.quantity} X {item.price}$</div>
+                                <div className="cart__item-price" onClick={() => addedToCart(item)}>{item.quantity} X {item.price}$</div>
                                 <div className="cart__close" onClick={() => deleteFromCart(item.id)}>&times;</div>
                             </div>
                         );
                     })
                 }
+                <div className="cart__button">
+                    Сохранить
+                </div>
+
             </div>
         </>
     );

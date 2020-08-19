@@ -46,4 +46,16 @@
         border: 1px solid #fff;
         cursor: pointer;
     }
+    &__button {
+        position: relative;
+        margin: 0 auto;
+        margin-top: 50px;
+        border: 1px solid lightgreen;
+        background-color: rgba(0,0,0,.7);
+        box-shadow: 0 0 20px rgba(256,256,256, .1);
+        font-size: 24px;
+        color: yellowgreen;
+        text-align: center;
+        width: 50%;
+    }
 }
