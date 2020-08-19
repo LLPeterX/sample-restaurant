@@ -1,20 +1,38 @@
 import React from 'react';
+import { connect } from 'react-redux'
+import { deleteFromCart } from '../../actions'
 import './cart-table.scss';
 
-const CartTable = () => {
+const CartTable = ({ items, deleteFromCart }) => {
     return (
         <>
             <div className="cart__title">Ваш заказ:</div>
             <div className="cart__list">
-                <div className="cart__item">
-                    <img src="https://static.1000.menu/img/content/21458/-salat-cezar-s-kr-salat-cezar-s-krevetkami-s-maionezom_1501173720_1_max.jpg" className="cart__item-img" alt="Cesar salad"></img>
-                    <div className="cart__item-title">Cesar salad</div>
-                    <div className="cart__item-price">12$</div>
-                    <div className="cart__close">&times;</div>
-                </div>
+                {
+                    items.sort((a,b)=>b.id-a.id).map(item => {
+                        return (
+                            <div className="cart__item" key={item.id}>
+                                <img src={item.url} className="cart__item-img" alt={item.title}></img>
+                                <div className="cart__item-title">{item.title}</div>
+                                <div className="cart__item-price">{item.quantity} X {item.price}$</div>
+                                <div className="cart__close" onClick={() => deleteFromCart(item.id)}>&times;</div>
+                            </div>
+                        );
+                    })
+                }
             </div>
         </>
     );
 };
 
-export default CartTable;
+const mapStateToProps = (state) => {
+    return {
+        items: state.selectedItems
+    }
+}
+
+const mapDispatchToProps = {
+    deleteFromCart
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(CartTable);
