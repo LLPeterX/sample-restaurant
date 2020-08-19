@@ -19,15 +19,16 @@ const reducer = (state = initalState, action) => {
       //    Если есть: в этом итеме увеличить quantity на 1
       // 3) В этом объекте сформировать key: ???            
       let item = state.selectedItems.find(i => i.id === action.payload.id);
-      if (!item) {
-        item = state.menu.find(i => i.id === action.payload.id);
-        const newItem = Object.assign({},item); // клонируем объект, чтобы не мутировать menu[]
+      if (!item) { // если в списке корзины блюда еще нет, сформировать новое с количеством=1  
+        const newItem = Object.assign({},state.menu.find(i => i.id === action.payload.id)); // клонируем объект, чтобы не мутировать menu[]
         newItem.quantity = 1;
         return { ...state, selectedItems: [...state.selectedItems, newItem], totalPrice: state.totalPrice+newItem.price }
       }
+      // блюдо уже есть в корзине - меняем его количество
       const newItem = Object.assign({},item);
       newItem.quantity++;
-      // заменить итем в существующем массиве: с помощью filter() отбираем остальное, затем плюс item
+      // заменить итем в существующем массиве: с помощью filter() отбираем остальное, затем добавляем item
+      // 
       const newSelectedItems = state.selectedItems.filter(i => i.id !== item.id);
       return { ...state, selectedItems: [...newSelectedItems, newItem], totalPrice: state.totalPrice+item.price }
     case 'DELETE_FROM_CART': // в payload - id
