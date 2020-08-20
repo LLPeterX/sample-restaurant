@@ -35,7 +35,6 @@ const mapStateToProps = (state) => {
     return ({
         menuItems: state.menu,
         isLoading: state.isLoading,
-
     });
 }
 

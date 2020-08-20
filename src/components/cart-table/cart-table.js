@@ -1,10 +1,15 @@
 import React from 'react';
 import { connect } from 'react-redux'
-import { deleteFromCart, addedToCart } from '../../actions'
+import { deleteFromCart, addedToCart, changeCart } from '../../actions'
+import WithRestoService from '../hoc'
 import './cart-table.scss';
+import './my.css';
 
 
-const CartTable = ({ items, deleteFromCart, addedToCart }) => {
+const CartTable = ({ RestoService, items, deleteFromCart, addedToCart, cartChanged, changeCart }) => {
+    if (items.length === 0) {
+        return (<div className="cart__title"> Ваша корзина пуста :( </div>)
+    }
     return (
         <>
             <div className="cart__title">Ваш заказ:</div>
@@ -15,15 +20,27 @@ const CartTable = ({ items, deleteFromCart, addedToCart }) => {
                             <div className="cart__item" key={item.id}>
                                 <img src={item.url} className="cart__item-img" alt={item.title}></img>
                                 <div className="cart__item-title">{item.title}</div>
-                                <div className="cart__item-price" onClick={() => addedToCart(item)}>{item.quantity} X {item.price}$</div>
-                                <div className="cart__close" onClick={() => deleteFromCart(item.id)}>&times;</div>
+                                <div className="cart__item-price" onClick={() => {
+                                    addedToCart(item);
+                                    changeCart(true);
+                                }}>{item.quantity} X {item.price}$</div>
+                                <div className="cart__close" onClick={() => {
+                                    deleteFromCart(item.id);
+                                    changeCart(true);
+                                }}>&times;</div>
                             </div>
                         );
                     })
                 }
-                <div className="cart__button">
-                    Сохранить
-                </div>
+                {
+                    cartChanged && items && items.length > 0 &&
+                    <div className="cart__button save_button" onClick={() => {
+                        RestoService.setOrder(items);
+                        changeCart(false);
+                    }}>
+                        Сохранить
+                    </div>
+                }
 
             </div>
         </>
@@ -41,16 +58,17 @@ function sortFunc(a, b) {
     return b.id - a.id;
 }
 
-
 const mapStateToProps = (state) => {
     return {
-        items: state.selectedItems
+        items: state.selectedItems,
+        cartChanged: state.cartChanged
     }
 }
 
 const mapDispatchToProps = {
     deleteFromCart,
-    addedToCart
+    addedToCart,
+    changeCart
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(CartTable);
+export default WithRestoService()(connect(mapStateToProps, mapDispatchToProps)(CartTable));

@@ -1,5 +1,6 @@
 .save_button {
-  font-size: 24px;
+  /* font-size: 24px;
   background: #000000;
-  color: white;
+  color: white; */
+  cursor: pointer;
 }
